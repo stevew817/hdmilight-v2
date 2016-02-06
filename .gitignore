@@ -58,3 +58,5 @@ _ngo
 *.vdbl
 *.vdbx
 fpga/isim/*
+
+*.lck
