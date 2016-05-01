@@ -42,9 +42,10 @@ ARCHITECTURE behavior OF test_ambilight IS
          viddata_b : IN  std_logic_vector(7 downto 0);
          hblank : IN  std_logic;
          vblank : IN  std_logic;
+         dataenable : in STD_LOGIC;
          cfgclk : IN  std_logic;
          cfgwe : IN  std_logic;
-         cfgaddr : IN  std_logic_vector(13 downto 0);
+         cfgaddr : IN  std_logic_vector(15 downto 0);
          cfgdatain : IN  std_logic_vector(7 downto 0);
          cfgdataout : OUT  std_logic_vector(7 downto 0);
          output : OUT  std_logic_vector(7 downto 0)
@@ -59,6 +60,7 @@ ARCHITECTURE behavior OF test_ambilight IS
    signal viddata_b : std_logic_vector(7 downto 0) := (others => '0');
    signal hblank : std_logic := '0';
    signal vblank : std_logic := '0';
+   signal dataenable : std_logic := '0';
    signal cfgclk : std_logic := '0';
    signal cfgwe : std_logic := '0';
    signal cfgaddr : std_logic_vector(13 downto 0) := (others => '0');
@@ -82,9 +84,10 @@ BEGIN
           viddata_b => viddata_b,
           hblank => hblank,
           vblank => vblank,
+          dataenable => dataenable,
           cfgclk => cfgclk,
           cfgwe => cfgwe,
-          cfgaddr => cfgaddr,
+          cfgaddr => "00" & cfgaddr,
           cfgdatain => cfgdatain,
           cfgdataout => cfgdataout,
           output => output
@@ -168,7 +171,8 @@ BEGIN
 				-- vBlank = hBlank = 0
 				hblank <= '0';
 				vblank <= '0';
-			
+				
+				dataenable <= '1';
 				-- line of video, 720 pixels in total
 				for x in 0 to 720 loop
 					viddata_r <= x"aa";
@@ -176,6 +180,7 @@ BEGIN
 					viddata_b <= x"00";
 					wait for vidclk_period;
 				end loop;
+				dataenable <= '0';
 				
 				-- hBlank = 1
 				hblank <= '1';

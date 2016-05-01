@@ -102,6 +102,14 @@ shiftOutput <= shiftData(23);
 -- over a 4 clock period:
 --     for a 1 output 1 1 1 0
 --     for a 0 output 1 0 0 0
+
+-- '1' for cycles 0-3 -> 4 cycles
+-- shiftout for cycles 4 - 15 -> 12 cycles
+-- '0' for cycles 16 - 19 -> 4 cycles
+
+-- 16M input, 20 cycles per bit gives a 800kHz clock; 
+-- 1.25us period -> WS2811 high speed mode
+
 nextOutput <= '1' when subbitcount(4 downto 2) = "000" else
               '0' when subbitcount(4 downto 2) = "100" else
               shiftOutput;

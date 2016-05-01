@@ -60,3 +60,7 @@ _ngo
 fpga/isim/*
 
 *.lck
+fpga/.project
+fpga/.settings/*
+contrib/ConfigGenerate/*.conf
+

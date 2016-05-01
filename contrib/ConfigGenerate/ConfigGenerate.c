@@ -51,8 +51,8 @@
 
 // LEDS_X * 2 + LEDS_Y * 2  must be <= 512, if it's not, then your configuration will span more than 1 output, and this
 // tool is not for you
-#define LEDS_X	73	// Number of X leds (number of LEDs in each of the Top and Bottom Rows), must be integer
-#define LEDS_Y	41	// Number of Y leds (number of LEDs in each of the Left and Right Columns, must be integer
+#define LEDS_X	64	// Number of X leds (number of LEDs in each of the Top and Bottom Rows), must be integer
+#define LEDS_Y	36	// Number of Y leds (number of LEDs in each of the Left and Right Columns, must be integer
 
 // Fine tuning the bounds of the screen
 // The screen is divided into a grid of cells of VIDEO_SCALING x VIDEO_SCALING in pixels by the FPGA

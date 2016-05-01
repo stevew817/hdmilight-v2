@@ -46,6 +46,11 @@ entity ambilight is
            cfgaddr : in STD_LOGIC_VECTOR (15 downto 0);
            cfgdatain : in  STD_LOGIC_VECTOR (7 downto 0);
            cfgdataout : out  STD_LOGIC_VECTOR (7 downto 0);
+           
+           -- Override controls
+           ambi_en : in STD_LOGIC;
+           mood_en : in STD_LOGIC;
+           rgb_override : in STD_LOGIC_VECTOR(23 downto 0);
 			  
            output : out STD_LOGIC_VECTOR(7 downto 0);
 
@@ -203,10 +208,24 @@ resultDelay : entity work.resultDelay port map(cfgclk,
                                                delayedStartDistribution, delayedResultAddr, delayedResultData,
                                                resultDelayFrameCount, resultDelayTickCount, resultDelayTemporalSmoothingRatio);
 
-
-areaResultR <= delayedResultData(23 downto 16);
-areaResultG <= delayedResultData(15 downto 8);
-areaResultB <= delayedResultData(7 downto 0);
+areaResultR <=
+	rgb_override(23 downto 16)       when mood_en = '1' else
+	delayedResultData(23 downto 16)  when ambi_en = '1' else
+	(others => '0');
+	
+areaResultG <=
+	rgb_override(15 downto 8)        when mood_en = '1' else
+	delayedResultData(15 downto 8)   when ambi_en = '1' else
+	(others => '0');
+	
+areaResultB <=
+	rgb_override(7 downto 0)         when mood_en = '1' else
+	delayedResultData(7 downto 0)    when ambi_en = '1' else
+	(others => '0');
+	
+--areaResultR <= delayedResultData(23 downto 16);
+--areaResultG <= delayedResultData(15 downto 8);
+--areaResultB <= delayedResultData(7 downto 0);
 
 resultDistributor : entity work.resultDistributor port map(
 	cfgclk, delayedStartDistribution, 
@@ -219,14 +238,14 @@ resultDistributor : entity work.resultDistributor port map(
 	gammaTableBAddr, gammaTableBData
 ); 
 
-ws2811Driver0 : entity work.ws2811Driver port map(cfgclk, driverReady(0), driverStart(0), driverData, output(0));
-ws2811Driver1 : entity work.ws2811Driver port map(cfgclk, driverReady(1), driverStart(1), driverData, output(1));
-ws2811Driver2 : entity work.ws2811Driver port map(cfgclk, driverReady(2), driverStart(2), driverData, output(2));
-ws2811Driver3 : entity work.ws2811Driver port map(cfgclk, driverReady(3), driverStart(3), driverData, output(3));
-ws2811Driver4 : entity work.ws2811Driver port map(cfgclk, driverReady(4), driverStart(4), driverData, output(4));
-ws2811Driver5 : entity work.ws2811Driver port map(cfgclk, driverReady(5), driverStart(5), driverData, output(5));
-ws2811Driver6 : entity work.ws2811Driver port map(cfgclk, driverReady(6), driverStart(6), driverData, output(6));
-ws2811Driver7 : entity work.ws2811Driver port map(cfgclk, driverReady(7), driverStart(7), driverData, output(7));
+ws2812bDriver0 : entity work.ws2812bDriver port map(cfgclk, driverReady(0), driverStart(0), driverData, output(0));
+ws2812bDriver1 : entity work.ws2812bDriver port map(cfgclk, driverReady(1), driverStart(1), driverData, output(1));
+ws2812bDriver2 : entity work.ws2812bDriver port map(cfgclk, driverReady(2), driverStart(2), driverData, output(2));
+ws2812bDriver3 : entity work.ws2812bDriver port map(cfgclk, driverReady(3), driverStart(3), driverData, output(3));
+ws2812bDriver4 : entity work.ws2812bDriver port map(cfgclk, driverReady(4), driverStart(4), driverData, output(4));
+ws2812bDriver5 : entity work.ws2812bDriver port map(cfgclk, driverReady(5), driverStart(5), driverData, output(5));
+ws2812bDriver6 : entity work.ws2812bDriver port map(cfgclk, driverReady(6), driverStart(6), driverData, output(6));
+ws2812bDriver7 : entity work.ws2812bDriver port map(cfgclk, driverReady(7), driverStart(7), driverData, output(7));
 
 --output(0) <= delayedStartDistribution;
 --output(1) <= startDistribution;
